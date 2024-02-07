@@ -1,36 +1,9 @@
 package MP1;
 
 
-public class DocumentBuilder implements DocumentBuilderInterface {
+public abstract class DocumentBuilder implements DocumentBuilderInterface {
 
-	@Override
-	public void createDocument() {
-			
-	}
-
-	@Override
-	public void addHeader(String header) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addParagraph(String paragraph) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Document getDocument() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-}
-
-class LetterDocumentBuilder implements DocumentBuilderInterface {
-	
-	private Document document;
+	protected Document document;
 	
 	@Override
 	public void createDocument() {
@@ -38,51 +11,42 @@ class LetterDocumentBuilder implements DocumentBuilderInterface {
 	}
 
 	@Override
-	public void addHeader(String header) {
-		DocumentParts part = new Header(header);
-		document.addParts(part);
-	}
-
-	@Override
-	public void addParagraph(String paragraph) {
-		DocumentParts part = new Paragraph(paragraph);
-		document.addParts(part);
-	}
-
-	@Override
 	public Document getDocument() {
 		return document;
-		
-	}	
+	}
 }
 
-class ExamPaperDocumentBuilder implements DocumentBuilderInterface {
-
-	Document document;
+class LetterDocumentBuilder extends DocumentBuilder {
 	
 	@Override
-	public void createDocument() {
-		document = new Document();
-	}
-
-	@Override
 	public void addHeader(String header) {
-		DocumentParts part = new Header(header);
-		document.addParts(part);
+		Header part = new Header(header);
+		document.addHeader(part);
 	}
 
 	@Override
 	public void addParagraph(String paragraph) {
-		DocumentParts part = new Paragraph(paragraph);
-		document.addParts(part);
+		Paragraph part = new Paragraph(paragraph);
+		document.addParagraph(part);
+	}
+
+}
+
+class ExamPaperDocumentBuilder extends DocumentBuilder {
+
+	@Override
+	public void addHeader(String header) {
+		Header part = new Header(header);
+		document.addHeader(part);
 	}
 
 	@Override
-	public Document getDocument() {
-		return document;
-		
-	}	
-	
+	public void addParagraph(String paragraph) {
+		Paragraph part = new Paragraph(paragraph);
+		document.addParagraph(part);
+	}
+
+
 }
 class CalendarDocumentBuilder implements DocumentBuilderInterface {
 

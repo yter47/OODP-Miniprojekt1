@@ -15,9 +15,9 @@ public class App {
 		paper.createNewDocument();
 		paper.addHeader("Examensarbete");
 		paper.addParagraph("Hej! detta är mitt examensarbete");
+		paper.addParagraph("test");
 		doc = paper.getDocument();
 		System.out.println(doc.getText());
-		System.out.println("hej");
 	}
 
 }

@@ -19,6 +19,10 @@ public class DocumentFacade {
 		builder.addParagraph(paragraph);
 	}
 	
+	public void editPart(String key, String newText) {
+		builder.getDocument().editPart(key, newText);
+	}
+	
 	public Document getDocument() {
 		return builder.getDocument();
 		
