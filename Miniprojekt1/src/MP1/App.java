@@ -8,16 +8,17 @@ public class App {
 		letter.createNewDocument();
 		letter.addHeader("Brev");
 		letter.addParagraph("Detta är ett brev");
-		Document doc = letter.getDocument();
-		System.out.println(doc.getText());
+		System.out.println(letter.getDocument().getText());
 		
 		DocumentFacade paper = factory.createExamPaperDocument();
 		paper.createNewDocument();
 		paper.addHeader("Examensarbete");
 		paper.addParagraph("Hej! detta är mitt examensarbete");
 		paper.addParagraph("test");
-		doc = paper.getDocument();
-		System.out.println(doc.getText());
+		System.out.println(paper.getDocument().getText());
+		paper.editPart("Header1", "Uppdaterade header1" );
+		paper.editPart("Paragraph1", "Uppdaterade paragraph1");
+		System.out.println(paper.getDocument().getText());
 	}
 
 }
