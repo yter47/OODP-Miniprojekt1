@@ -1,10 +1,11 @@
 package MP1;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Document implements DocumentParts{
+public class Document implements DocumentParts, Iterable<DocumentParts> {
 	
 	private Map<String, DocumentParts> parts;
 	private int headerCounter = 0;
@@ -47,6 +48,28 @@ public class Document implements DocumentParts{
 	public void setText(String newText) {
 		
 	}
+	
+	@Override
+	public Iterator<DocumentParts> iterator() {
+		return new DocumentIterator();
+	}
+	
+	private class DocumentIterator implements Iterator<DocumentParts> {
+
+		private Iterator<Map.Entry<String, DocumentParts>> entries = parts.entrySet().iterator();
+		
+		@Override
+		public boolean hasNext() {
+			return entries.hasNext();
+		}
+
+		@Override
+		public DocumentParts next() {
+			return entries.next().getValue();
+		}
+		
+	}
+	
 }
 
 class Header implements DocumentParts {

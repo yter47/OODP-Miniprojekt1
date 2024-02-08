@@ -19,6 +19,13 @@ public class App {
 		paper.editPart("Header1", "Uppdaterade header1" );
 		paper.editPart("Paragraph1", "Uppdaterade paragraph1");
 		System.out.println(paper.getDocument().getText());
+		printDocument(paper.getDocument());
+	}
+	
+	public static void printDocument(Document document) {
+		for(DocumentParts part : document) {
+			System.out.println(part.getText());
+		}
 	}
 
 }
