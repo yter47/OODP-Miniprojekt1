@@ -1,7 +1,8 @@
 package MP1;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -10,9 +11,11 @@ public class Document implements DocumentParts, Iterable<DocumentParts> {
 	private Map<String, DocumentParts> parts;
 	private int headerCounter = 0;
 	private int paragraphCounter = 0;
+	private int listCounter = 0;
+	private int tableCounter = 0;
 	
 	public Document() {
-		this.parts = new HashMap<>(); 
+		this.parts = new LinkedHashMap<>(); 
 	}
 	
 	public void addHeader(Header header) {
@@ -23,6 +26,16 @@ public class Document implements DocumentParts, Iterable<DocumentParts> {
 	public void addParagraph(Paragraph paragraph) {
 		String key = "Paragraph" + (++paragraphCounter);
 		parts.put(key, paragraph);
+	}
+	
+	public void addList(DocumentList list) {
+		String key = "List" + (listCounter++);
+		parts.put(key, list);
+	}
+	
+	public void addTable(Table table) {
+		String key = "Table" + (tableCounter++);
+		parts.put(key, table);
 	}
 	
 	public void addParts(String key, DocumentParts part) {
@@ -36,7 +49,7 @@ public class Document implements DocumentParts, Iterable<DocumentParts> {
 
 	public void editPart(String key, String newText) {
 		DocumentParts part = parts.get(key);
-		if(part != null) {
+		if(part != null) {			
 			part.setText(newText);
 		} else {
 			throw new IllegalArgumentException("No part with that key!");
@@ -77,8 +90,7 @@ class Header implements DocumentParts {
 	String header;
 	
 	Header(String header) {
-		this.header = header;
-		
+		this.header = header;	
 	}
 	
 	@Override
@@ -112,3 +124,111 @@ class Paragraph implements DocumentParts {
 	}
 	
 }
+
+class DocumentList implements DocumentParts, Iterable<DocumentParts> {
+    private java.util.List<DocumentParts> items = new ArrayList<>();
+
+    public void addItem(DocumentParts item) {
+        items.add(item);
+    }
+
+    @Override
+    public String getText() {
+        return items.stream().map(DocumentParts::getText).collect(Collectors.joining("\n"));
+    }
+
+    @Override
+    public void setText(String newText) {
+        throw new UnsupportedOperationException("Cannot set text directly on a list.");
+    }
+
+    @Override
+    public Iterator<DocumentParts> iterator() {
+        return items.iterator();
+    }
+}
+
+class ListItem implements DocumentParts {
+
+	private String list;
+	
+	ListItem(String text) {
+		this.list = text;
+	}
+	
+	@Override
+	public String getText() {
+		return list;
+	}
+
+	@Override
+	public void setText(String newText) {
+		this.list = newText;	
+	}
+	
+}
+
+class Table implements DocumentParts, Iterable<TableRow> {
+    private java.util.List<TableRow> rows = new ArrayList<>();
+
+    public void addRow(TableRow row) {
+        rows.add(row);
+    }
+
+    @Override
+    public String getText() {
+        return rows.stream().map(TableRow::getText).collect(Collectors.joining("\n"));
+    }
+
+    @Override
+    public void setText(String newText) {
+        throw new UnsupportedOperationException("Cannot set text directly on a table.");
+    }
+
+    @Override
+    public Iterator<TableRow> iterator() {
+        return rows.iterator();
+    }
+}
+
+class TableRow implements DocumentParts, Iterable<TableCell> {
+    private java.util.List<TableCell> cells = new ArrayList<>();
+
+    public void addCell(TableCell cell) {
+        cells.add(cell);
+    }
+
+    @Override
+    public String getText() {
+        return cells.stream().map(TableCell::getText).collect(Collectors.joining(" | "));
+    }
+
+    @Override
+    public void setText(String newText) {
+        throw new UnsupportedOperationException("Cannot set text directly on a table row.");
+    }
+
+    @Override
+    public Iterator<TableCell> iterator() {
+        return cells.iterator();
+    }
+}
+
+class TableCell implements DocumentParts {
+    private String text;
+
+    TableCell(String text) {
+        this.text = text;
+    }
+
+    @Override
+    public String getText() {
+        return text;
+    }
+
+    @Override
+    public void setText(String newText) {
+        this.text = newText;
+    }
+}
+
