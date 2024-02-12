@@ -10,29 +10,24 @@ public class App {
 		DocumentFacade letter = factory.createLetterDocument();
 		letter.createNewDocument();
 		letter.addHeader("Brev");
-		letter.addParagraph("Detta �r ett brev");
+		letter.addParagraph("Detta är ett brev");
 		System.out.println(letter.getDocument().getText());
+		System.out.println();
 		
 		DocumentFacade paper = factory.createExamPaperDocument();
 		paper.createNewDocument();
 		paper.addHeader("Examensarbete");
-		paper.addParagraph("Hej! detta �r mitt examensarbete");
+		paper.addParagraph("Hej! detta är mitt examensarbete");
 		paper.addParagraph("test");
-		System.out.println(paper.getDocument().getText());
+		printDocument(paper.getDocument());
 		
 		//Redigerar Header1 och Paragraph1
 		paper.editPart("Header1", "Uppdaterade header1" );
 		paper.editPart("Paragraph1", "Uppdaterade paragraph1");
-		printDocument(paper.getDocument());
-		System.out.println();
-		System.out.println();
 		
 		//Adderar en Lista
 		List<String> list = Arrays.asList("1", "2", "3");
 		paper.addList(list);
-		printDocument(paper.getDocument());
-		System.out.println();
-		System.out.println();
 		
 		//Adderar en tabell
 		List<List<String>> tableRows = Arrays.asList(
@@ -40,7 +35,6 @@ public class App {
 				Arrays.asList("Cell 1.2", "Cell 2.2"));
 		paper.addTable(tableRows);
 		printDocument(paper.getDocument());
-		
 		
 	}
 	

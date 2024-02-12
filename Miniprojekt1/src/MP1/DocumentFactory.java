@@ -11,4 +11,9 @@ public class DocumentFactory {
 		DocumentBuilderInterface builder = new ExamPaperDocumentBuilder();
 		return new DocumentFacade(builder);
 	}	
+	
+	public DocumentFacade createCalendarDocument() {
+		DocumentBuilderInterface builder = new CalendarDocumentBuilder();
+		return new DocumentFacade(builder);
+	}
 }
