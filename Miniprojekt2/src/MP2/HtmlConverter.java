@@ -6,42 +6,41 @@ public class HtmlConverter implements DocumentConverter, DocumentConverterVisito
 
 	@Override
 	public void visitHeader(Header header) {
-		htmlOutput.append("<h1>").append(header.getText()).append("</h1>");
+		htmlOutput.append("<h1>").append(header.getText()).append("</h1>\n");
 
 	}
 
 	@Override
 	public void visitParagraph(Paragraph paragraph) {
-		htmlOutput.append("<h1>").append(paragraph.getText()).append("</h1>");
+		htmlOutput.append("<p1>").append(paragraph.getText()).append("</p1>\n");
 
 	}
 
 	@Override
 	public void visitTable(Table table) {
-
+		htmlOutput.append("<table>").append(table.getText()).append("</table>\n");
 	}
 
 	@Override
 	public void vistTableRow(TableRow tableRow) {
-		// TODO Auto-generated method stub
+		htmlOutput.append("<tr>").append(tableRow.getText()).append("</tr>\n");
 
 	}
 
 	@Override
 	public void vistTableCell(TableCell tableCell) {
-		// TODO Auto-generated method stub
-
+		htmlOutput.append("<th>").append(tableCell.getText()).append("</th>\n");
 	}
 
 	@Override
 	public void visitDocumentList(DocumentList documentList) {
-		// TODO Auto-generated method stub
+		htmlOutput.append("<ul>").append(documentList.getText()).append("</ul>\n");
 
 	}
 
 	@Override
 	public void visitListItem(ListItem listItem) {
-		// TODO Auto-generated method stub
+		htmlOutput.append("<li>").append(listItem.getText()).append("</li>\n");
 
 	}
 
