@@ -7,37 +7,42 @@ public class App {
 
 	public static void main(String[] args) {
 		DocumentFactory factory = new DocumentFactory();
-        DocumentFacade letter = factory.createLetterDocument();
-        letter.createNewDocument();
-        letter.addComponent(new Header("brev"));
-        letter.addComponent(new Paragraph("Detta �r ett brev"));
-
         DocumentFacade paper = factory.createExamPaperDocument();
+        
         paper.createNewDocument();
         paper.addComponent(new Header("Examensarbete"));
         paper.addComponent(new Paragraph("Hej! Detta �r mitt examensarbete"));
         paper.addComponent(new Paragraph("test"));
         
+        printDocument(paper.getDocument());
+        System.out.println();
+        
         // Redigerar Header1 och Paragraph1
-        paper.editPart(0, "Uppdaterade header1");
-        paper.editPart(2, "Uppdaterade paragraph1");
+        paper.editComponent(0, new Header("Hej test med editComponent"));
+        printDocument(paper.getDocument());
+        System.out.println();
+        
+        //Testar undo() på första komponenten
+        paper.undo();
+        printDocument(paper.getDocument()); 
+        System.out.println();
         
         List<String> list = Arrays.asList("1", "2", "3");
-		paper.addList(list);
-		
-		//Adderar en tabell
-		List<List<String>> tableRows = Arrays.asList(
-				Arrays.asList("Cell 1.1", "Cell 1.2"),
-				Arrays.asList("Cell 1.2", "Cell 2.2"));
-		paper.addTable(tableRows);
+		paper.addComponent(new DocumentList(list));
 		printDocument(paper.getDocument());
-
-        HtmlConverter htmlConverter = new HtmlConverter();
-
-        printDocument(paper.getDocument());
-       
-        // Konverterar dokumentet till HTML
-        paper.getDocument().accept(htmlConverter);
+		System.out.println();
+		
+		paper.removeComponent(0);
+		printDocument(paper.getDocument());
+		System.out.println();
+		
+		paper.undo();
+		printDocument(paper.getDocument());
+		System.out.println();
+		
+		//Konverterar dokumentet till HTML
+		HtmlConverter htmlConverter = new HtmlConverter();
+		paper.getDocument().accept(htmlConverter);
         String htmlResult = htmlConverter.getConvertedHtml();
         System.out.println(htmlResult);
     }

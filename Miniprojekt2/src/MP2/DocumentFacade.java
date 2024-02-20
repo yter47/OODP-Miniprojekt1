@@ -1,6 +1,5 @@
 package MP2;
 
-import java.util.List;
 import java.util.Stack;
 
 public class DocumentFacade {
@@ -21,41 +20,27 @@ public class DocumentFacade {
 		addCommand.execute();
 		commandHistory.push(addCommand);
 	}
-
-	public void addList(List<String> items) {
-		DocumentList list = new DocumentList();
-		for (String item : items) {
-			list.addItem(new ListItem(item));
-		}
-		builder.addList(list);
+	
+	public void editComponent(int index, DocumentParts component) {
+		DocumentCommand editCommand = new EditComponentCommand(index, builder.getDocument(), component);
+		editCommand.execute();
+		commandHistory.push(editCommand);
 	}
-
-	public void addTable(List<List<String>> rows) {
-		Table table = new Table();
-		for (List<String> rowItems : rows) {
-			TableRow row = new TableRow();
-			for (String cell : rowItems) {
-				row.addCell(new TableCell(cell));
-			}
-			table.addRow(row);
-		}
-		builder.addTable(table);
+	
+	public void removeComponent(int index) {
+		DocumentCommand removeCommand = new RemoveComponentCommand(builder.getDocument(), index);
+		removeCommand.execute();
+		commandHistory.push(removeCommand);
 	}
-
-	public void editPart(int index, String newText) {
-		DocumentParts component = builder.getDocument().getComponent(index);
-		if (component != null) {
-			DocumentCommand editCommand = new EditComponentCommand(component, newText);
-			editCommand.execute();
-			commandHistory.push(editCommand);
-		} else {
-			throw new IllegalArgumentException("No component at that index!");
+	
+	public void undo() {
+		if (!commandHistory.isEmpty()) {
+			DocumentCommand lastCommand = commandHistory.pop();
+			lastCommand.undo();
 		}
 	}
 
 	public Document getDocument() {
 		return builder.getDocument();
-
 	}
-
 }

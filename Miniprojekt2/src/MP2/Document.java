@@ -2,9 +2,7 @@ package MP2;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Document implements DocumentParts, Iterable<DocumentParts> {
@@ -14,7 +12,7 @@ public class Document implements DocumentParts, Iterable<DocumentParts> {
 	public Document() {
 		this.parts = new ArrayList<>();
 	}
-	
+
 	public DocumentParts getComponent(int index) {
 		return parts.get(index);
 	}
@@ -22,19 +20,26 @@ public class Document implements DocumentParts, Iterable<DocumentParts> {
 	public void addComponent(DocumentParts component) {
 		parts.add(component);
 	}
-	
+
 	public void addComponent(int index, DocumentParts component) {
 		parts.add(index, component);
 	}
-	
+
+	public void setComponent(int index, DocumentParts component) {
+		if (index >= 0 && index < parts.size()) {
+			parts.set(index, component);
+		} else throw new IllegalArgumentException("No part at that index");
+		
+	}
+
 	public void removeComponent(int index) {
-        if (index >= 0 && index < parts.size()) {
-            parts.remove(index);
-        } else {
-            throw new IllegalArgumentException("No part at that index!");
-        }
-    }
-	
+		if (index >= 0 && index < parts.size()) {
+			parts.remove(index);
+		} else {
+			throw new IllegalArgumentException("No part at that index!");
+		}
+	}
+
 	public int indexOf(DocumentParts component) {
 		return parts.indexOf(component);
 	}
@@ -93,7 +98,6 @@ public class Document implements DocumentParts, Iterable<DocumentParts> {
 			part.accept(visitor);
 		}
 	}
-
 }
 
 class Header implements DocumentParts {
@@ -147,7 +151,11 @@ class Paragraph implements DocumentParts {
 }
 
 class DocumentList implements DocumentParts, Iterable<DocumentParts> {
-	private java.util.List<DocumentParts> items = new ArrayList<>();
+	private java.util.List<DocumentParts> items;
+
+	public DocumentList(List<String> listText) {
+		this.items = listText.stream().map(ListItem::new).collect(Collectors.toList());
+	}
 
 	public void addItem(DocumentParts item) {
 		items.add(item);
@@ -200,7 +208,17 @@ class ListItem implements DocumentParts {
 }
 
 class Table implements DocumentParts, Iterable<TableRow> {
-	private java.util.List<TableRow> rows = new ArrayList<>();
+	private java.util.List<TableRow> rows;
+
+	public Table(List<List<String>> tableRows) {
+		this.rows = tableRows.stream().map(rowItems -> {
+			TableRow row = new TableRow();
+			for (String cell : rowItems) {
+				row.addCell(new TableCell(cell));
+			}
+			return row;
+		}).collect(Collectors.toList());
+	}
 
 	public void addRow(TableRow row) {
 		rows.add(row);
@@ -252,7 +270,6 @@ class TableRow implements DocumentParts, Iterable<TableCell> {
 	@Override
 	public void accept(DocumentConverterVisitor visitor) {
 		visitor.vistTableRow(this);
-
 	}
 }
 
@@ -276,6 +293,5 @@ class TableCell implements DocumentParts {
 	@Override
 	public void accept(DocumentConverterVisitor visitor) {
 		visitor.vistTableCell(this);
-
 	}
 }

@@ -7,13 +7,11 @@ public class HtmlConverter implements DocumentConverter, DocumentConverterVisito
 	@Override
 	public void visitHeader(Header header) {
 		htmlOutput.append("<h1>").append(header.getText()).append("</h1>\n");
-
 	}
 
 	@Override
 	public void visitParagraph(Paragraph paragraph) {
 		htmlOutput.append("<p1>").append(paragraph.getText()).append("</p1>\n");
-
 	}
 
 	@Override
@@ -24,7 +22,6 @@ public class HtmlConverter implements DocumentConverter, DocumentConverterVisito
 	@Override
 	public void vistTableRow(TableRow tableRow) {
 		htmlOutput.append("<tr>").append(tableRow.getText()).append("</tr>\n");
-
 	}
 
 	@Override
@@ -35,13 +32,11 @@ public class HtmlConverter implements DocumentConverter, DocumentConverterVisito
 	@Override
 	public void visitDocumentList(DocumentList documentList) {
 		htmlOutput.append("<ul>").append(documentList.getText()).append("</ul>\n");
-
 	}
 
 	@Override
 	public void visitListItem(ListItem listItem) {
 		htmlOutput.append("<li>").append(listItem.getText()).append("</li>\n");
-
 	}
 
 	@Override

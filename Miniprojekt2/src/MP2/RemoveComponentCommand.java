@@ -5,10 +5,10 @@ public class RemoveComponentCommand implements DocumentCommand {
 	private DocumentParts component;
 	private int index;
 	
-	public RemoveComponentCommand(Document document, DocumentParts component) {
+	public RemoveComponentCommand(Document document, int index) {
 		this.document = document;
-		this.component = component;
-		this.index = document.indexOf(component);
+		this.index = index;
+		this.component = document.getComponent(index);
 	}
 
 	@Override

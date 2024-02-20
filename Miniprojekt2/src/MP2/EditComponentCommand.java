@@ -1,26 +1,33 @@
 package MP2;
 
 public class EditComponentCommand implements DocumentCommand {
-	
+
+	private Document document;
 	private DocumentParts component;
-	private String text;
-	private String newText;
-	
-	public EditComponentCommand(DocumentParts component, String newText) {
-		this.component = component;
-		this.text = component.getText();
-		this.newText = newText;
+	private DocumentParts newComponent;
+	private int index;
+
+	public EditComponentCommand(int index, Document document, DocumentParts newComponent) {
+		this.document = document;
+		this.index = index;
+		
+		try {
+			this.component = document.getComponent(index);
+			this.newComponent = newComponent;
+		} catch (IndexOutOfBoundsException e) {
+			String errorMessage = "Index finns ej " + e.getMessage();
+			throw new IllegalArgumentException(errorMessage);
+		}
+		
 	}
 
 	@Override
 	public void execute() {
-		component.setText(newText);
-		
+		document.setComponent(index, newComponent);
 	}
 
 	@Override
 	public void undo() {
-		component.setText(text);
-		
+		document.setComponent(index, component);
 	}
 }
