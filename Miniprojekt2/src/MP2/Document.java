@@ -203,7 +203,6 @@ class ListItem implements DocumentParts {
 
 	@Override
 	public void accept(DocumentConverterVisitor visitor) {
-		visitor.visitListItem(this);
 	}
 }
 
@@ -269,7 +268,7 @@ class TableRow implements DocumentParts, Iterable<TableCell> {
 
 	@Override
 	public void accept(DocumentConverterVisitor visitor) {
-		visitor.vistTableRow(this);
+		visitor.visitTableRow(this);
 	}
 }
 
@@ -292,6 +291,5 @@ class TableCell implements DocumentParts {
 
 	@Override
 	public void accept(DocumentConverterVisitor visitor) {
-		visitor.vistTableCell(this);
 	}
 }

@@ -11,34 +11,37 @@ public class HtmlConverter implements DocumentConverter, DocumentConverterVisito
 
 	@Override
 	public void visitParagraph(Paragraph paragraph) {
-		htmlOutput.append("<p1>").append(paragraph.getText()).append("</p1>\n");
+		htmlOutput.append("<p>").append(paragraph.getText()).append("</p>\n");
 	}
 
 	@Override
 	public void visitTable(Table table) {
-		htmlOutput.append("<table>").append(table.getText()).append("</table>\n");
+		htmlOutput.append("<table>\n");
+		for (DocumentParts tableRow : table) {
+				tableRow.accept(this);
+		}
+		
+		htmlOutput.append("</table>\n");
 	}
 
 	@Override
-	public void vistTableRow(TableRow tableRow) {
-		htmlOutput.append("<tr>").append(tableRow.getText()).append("</tr>\n");
-	}
-
-	@Override
-	public void vistTableCell(TableCell tableCell) {
-		htmlOutput.append("<th>").append(tableCell.getText()).append("</th>\n");
+	public void visitTableRow(TableRow tableRow) {
+	    htmlOutput.append("<tr>\n");
+	    for (TableCell cell : tableRow) {
+	        htmlOutput.append("<td>").append(cell.getText()).append("</td>\n");
+	    }
+	    htmlOutput.append("</tr>\n");
 	}
 
 	@Override
 	public void visitDocumentList(DocumentList documentList) {
-		htmlOutput.append("<ul>").append(documentList.getText()).append("</ul>\n");
-	}
-
-	@Override
-	public void visitListItem(ListItem listItem) {
-		htmlOutput.append("<li>").append(listItem.getText()).append("</li>\n");
-	}
-
+		htmlOutput.append("<ul>\n");
+		for (DocumentParts listItem : documentList) {
+			htmlOutput.append("<li>").append(listItem.getText()).append("</li>\n");
+		}
+		htmlOutput.append("</ul>\n");
+	}	
+	
 	@Override
 	public String convert(Document document) {
 		for (DocumentParts part : document) {
