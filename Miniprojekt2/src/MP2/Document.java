@@ -28,8 +28,9 @@ public class Document implements DocumentParts, Iterable<DocumentParts> {
 	public void setComponent(int index, DocumentParts component) {
 		if (index >= 0 && index < parts.size()) {
 			parts.set(index, component);
-		} else throw new IllegalArgumentException("No part at that index");
-		
+		} else
+			throw new IllegalArgumentException("No part at that index");
+
 	}
 
 	public void removeComponent(int index) {
@@ -47,15 +48,6 @@ public class Document implements DocumentParts, Iterable<DocumentParts> {
 	@Override
 	public String getText() {
 		return parts.stream().map(DocumentParts::getText).collect(Collectors.joining("\n"));
-	}
-
-	public void editPart(int index, String newText) {
-		DocumentParts part = parts.get(index);
-		if (part != null) {
-			part.setText(newText);
-		} else {
-			throw new IllegalArgumentException("No part at that index!");
-		}
 	}
 
 	@Override
@@ -121,7 +113,6 @@ class Header implements DocumentParts {
 	@Override
 	public void accept(DocumentConverterVisitor visitor) {
 		visitor.visitHeader(this);
-
 	}
 }
 
@@ -179,7 +170,6 @@ class DocumentList implements DocumentParts, Iterable<DocumentParts> {
 	@Override
 	public void accept(DocumentConverterVisitor visitor) {
 		visitor.visitDocumentList(this);
-
 	}
 }
 
