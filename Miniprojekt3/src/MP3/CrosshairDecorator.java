@@ -3,10 +3,10 @@ package MP3;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class CrossHairDecorator implements Shape {
+public class CrosshairDecorator implements Shape {
 	private Shape decoratee;
 	
-	public CrossHairDecorator(Shape decoratee) {
+	public CrosshairDecorator(Shape decoratee) {
 		this.decoratee = decoratee;
 	}
 	

@@ -1,6 +1,6 @@
 package state;
 
-import MP3.CrossHairDecorator;
+import MP3.CrosshairDecorator;
 import MP3.MarkTypes;
 import MP3.Point;
 import MP3.Shape;
@@ -27,7 +27,7 @@ public class MarkState implements State {
 	            return new ShapeDecorator(selected);
 	        
 	        case CROSSHAIR:
-	            return new CrossHairDecorator(selected);
+	            return new CrosshairDecorator(selected);
 	         
 	        default:
 	            throw new IllegalArgumentException("Unsupported mark type: " + markType);
