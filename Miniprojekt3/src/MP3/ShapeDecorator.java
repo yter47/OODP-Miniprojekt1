@@ -14,10 +14,19 @@ public class ShapeDecorator implements Shape {
 	public void draw(Graphics g) {
         decoratee.draw(g);
 
-        g.setColor(Color.BLUE); 
-        g.fillOval((int) (decoratee.getPosition().getX() - decoratee.getWidth() / 2.0),
-                   (int) (decoratee.getPosition().getY() - decoratee.getHeight() / 2.0),
-                   (int) decoratee.getWidth(), (int) decoratee.getHeight());
+        if(decoratee instanceof Circle) {
+            g.setColor(Color.BLUE); 
+            g.fillOval((int) (decoratee.getPosition().getX() - decoratee.getWidth() / 2.0),
+                       (int) (decoratee.getPosition().getY() - decoratee.getHeight() / 2.0),
+                       (int) decoratee.getWidth(), (int) decoratee.getHeight());
+        } else if (decoratee instanceof Rectangle) {
+        	g.setColor(Color.GREEN);
+        	g.fillRect((int) (decoratee.getPosition().getX() - decoratee.getWidth() / 2.0),
+        	           (int) (decoratee.getPosition().getY() - decoratee.getHeight() / 2.0),
+        	           (int) decoratee.getWidth(), (int) decoratee.getHeight());
+
+        }
+
     }
 
 	@Override
