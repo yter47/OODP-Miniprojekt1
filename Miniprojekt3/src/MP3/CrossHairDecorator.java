@@ -3,23 +3,27 @@ package MP3;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class ShapeDecorator implements Shape {
+public class CrossHairDecorator implements Shape {
 	private Shape decoratee;
-
-	public ShapeDecorator(Shape decoratee) {
+	
+	public CrossHairDecorator(Shape decoratee) {
 		this.decoratee = decoratee;
 	}
-
+	
 	@Override
 	public void draw(Graphics g) {
         decoratee.draw(g);
 
-        g.setColor(Color.BLUE); 
-        g.fillOval((int) (decoratee.getPosition().getX() - decoratee.getWidth() / 2.0),
-                   (int) (decoratee.getPosition().getY() - decoratee.getHeight() / 2.0),
-                   (int) decoratee.getWidth(), (int) decoratee.getHeight());
-    }
+        Point position = decoratee.getPosition();
+        double x = position.getX();
+        double y = position.getY();
+        double halfWidth = decoratee.getWidth() / 2.0;
+        double halfHeight = decoratee.getHeight() / 2.0;
 
+        g.setColor(Color.RED); 
+        g.drawLine((int) (x - halfWidth), (int) y, (int) (x + halfWidth), (int) y);
+        g.drawLine((int) x, (int) (y - halfHeight), (int) x, (int) (y + halfHeight));
+    }
 	@Override
 	public Point getPosition() {
 		return decoratee.getPosition();

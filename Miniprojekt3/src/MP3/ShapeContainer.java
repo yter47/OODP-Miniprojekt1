@@ -7,124 +7,101 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-public class ShapeContainer extends JPanel implements Pointable
-  {
-  private static final long serialVersionUID = 1L;
-  private List<Shape>       shapes           = new LinkedList<Shape>();
+import state.InsertState;
+import state.State;
 
-  public enum Mode
-    {
-    INSERT, MOVE, DELETE, MARK, UNMARK, RESIZE
-    };
+public class ShapeContainer extends JPanel implements Pointable {
+	private static final long serialVersionUID = 1L;
+	private List<Shape> shapes = new LinkedList<Shape>();
+	private State currentState;
+	private Shape selected;
+	private ShapeTypes currentShape;
+	private MarkTypes markType;
 
-  private Mode  mode = Mode.INSERT;
-  private Shape selected;
-  
-  public ShapeContainer()
-    {
-    super();
-    MouseHandler mouseHandler = new MouseHandler(this);
-    this.addMouseListener(mouseHandler);
-    this.addMouseMotionListener(mouseHandler);
-    this.setBackground(Color.white);
-    }
-  
-  public void addShape(Shape shape)
-    {
-    shapes.add(shape);
-    }
+	public ShapeContainer() {
+		super();
+		this.currentState = new InsertState();
+		this.currentShape = ShapeTypes.CIRCLE;
+		this.markType = MarkTypes.FILL;
+		MouseHandler mouseHandler = new MouseHandler(this);
+		this.addMouseListener(mouseHandler);
+		this.addMouseMotionListener(mouseHandler);
+		this.setBackground(Color.white);
+	}
 
-  public void paintComponent(Graphics g) // anropas av Swing när det är dags att
-                                         // rendera
-    {
-    super.paintComponent(g);
+	public void addShape(Shape shape) {
+		shapes.add(shape);
+		repaint();
+	}
 
-    for (Shape shape : shapes)
-      shape.draw(g);
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		for (Shape shape : shapes)
+			shape.draw(g);
+	}
 
-    }
+	public void select(Point point) {
+		for (Shape shape : shapes) {
+			if (shape.intersects(point)) {
+				selected = shape;
+				return;
+			}
+		}
+		selected = null;
+	}
 
-  private void select(Point point)
-    {
-    for (Shape shape : shapes)
-      {
-      if (shape.intersects(point))
-        {
-        selected = shape;
-        return;
-        }
-      }
-    }
+	public void pointerDown(Point point) {
+		currentState.pointerDown(point, this);
+	}
 
-  public void pointerDown(Point point)
-    {
-    if (mode == Mode.INSERT)
-      {
-      shapes.add(new Circle(point, Math.random() * 50.0));
-      repaint(); // uppmanar swing att måla om
-      }
-    else if (mode == Mode.MOVE)
-      select(point);
-    else if (mode == Mode.DELETE)
-      {
-      select(point);
-      if (selected != null)
-        shapes.remove(selected);
-      selected = null;
-      repaint(); // uppmanar swing att måla om
-      }
-    else if (mode == Mode.MARK)
-      {
-      select(point);
-      if(selected != null)
-        {
-        Shape markedShape = new ShapeDecorator(selected);
-        shapes.remove(selected);
-        shapes.add(markedShape);
-        repaint();
-        }
-      }
-    else if (mode == Mode.UNMARK)
-      {
-      select(point);
-      if(selected != null)
-        {
-        Shape unmarkedShape = selected.peel();
-        shapes.remove(selected);
-        shapes.add(unmarkedShape);
-        repaint();
-        }
-      }
-    else if (mode == Mode.RESIZE)
-      {
-      select(point);
-      }
-    }
+	public void pointerUp(Point point) {
+		currentState.pointerUp(point, this);
+	}
 
-  public void pointerUp(Point point)
-    {
-    selected = null;
-    }
+	public void pointerMoved(Point point, boolean pointerDown) {
+		currentState.pointerMoved(point, this, pointerDown);
+	}
 
-  public void pointerMoved(Point point, boolean pointerDown)
-    {
-    if (selected != null && pointerDown)
-      {
-      if (mode == Mode.MOVE)
-        {
-        selected.moveTo(point);
-        repaint(); // uppmanar swing att måla om
-        }
-      else if(mode == Mode.RESIZE)
-        {
-        selected.resizeTo(point);
-        repaint();
-        }      
-      }
-    }
+	public void setState(State state) {
+		this.currentState = state;
+	}
 
-  public void setMode(Mode mode)
-    {
-    this.mode = mode;
-    }
-  }
+	public void setSelected(Shape selected) {
+		this.selected = selected;
+	}
+
+	public Shape getSelected() {
+		return this.selected;
+	}
+
+	public List<Shape> getShapes() {
+		return this.shapes;
+	}
+
+	public void removeShape(Shape shape) {
+		shapes.remove(shape);
+		repaint();
+	}
+
+	public void setShape(ShapeTypes shapeType) {
+		if (shapeType == ShapeTypes.CIRCLE) {
+			this.currentShape = ShapeTypes.CIRCLE;
+		} else
+			this.currentShape = ShapeTypes.RECTANGLE;
+	}
+
+	public ShapeTypes getShape() {
+		return this.currentShape;
+	}
+
+	public void setMarkType(MarkTypes markType) {
+		if (markType == MarkTypes.FILL) {
+			this.markType = MarkTypes.FILL;
+		} else
+			this.markType = MarkTypes.CROSSHAIR;
+	}
+
+	public MarkTypes getMarkType() {
+		return this.markType;
+	}
+}

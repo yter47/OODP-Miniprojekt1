@@ -7,6 +7,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import state.DeleteState;
+import state.InsertState;
+import state.MarkState;
+import state.MoveState;
+import state.ResizeState;
+import state.UnmarkState;
+
 public class ShapeApp extends JFrame
   {
   private static final long serialVersionUID = 1L;
@@ -23,14 +30,25 @@ public class ShapeApp extends JFrame
   public void createMenue()
     {
     JMenu menu = new JMenu("Modes");
-    createMenuItem(menu, "Insert", e -> shapeContainer.setMode(ShapeContainer.Mode.INSERT));
-    createMenuItem(menu, "Move", e -> shapeContainer.setMode(ShapeContainer.Mode.MOVE));
-    createMenuItem(menu, "Delete", e -> shapeContainer.setMode(ShapeContainer.Mode.DELETE));
-    createMenuItem(menu, "Mark", e -> shapeContainer.setMode(ShapeContainer.Mode.MARK));
-    createMenuItem(menu, "Unmark", e -> shapeContainer.setMode(ShapeContainer.Mode.UNMARK));
-    createMenuItem(menu, "Resize", e -> shapeContainer.setMode(ShapeContainer.Mode.RESIZE));
+    createMenuItem(menu, "Insert", e -> shapeContainer.setState(new InsertState()));
+    createMenuItem(menu, "Move", e -> shapeContainer.setState(new MoveState()));
+    createMenuItem(menu, "Delete", e -> shapeContainer.setState(new DeleteState()));
+    createMenuItem(menu, "Mark", e -> shapeContainer.setState(new MarkState()));
+    createMenuItem(menu, "Unmark", e -> shapeContainer.setState(new UnmarkState()));
+    createMenuItem(menu, "Resize", e -> shapeContainer.setState(new ResizeState()));
     JMenuBar menuBar = new JMenuBar();
     menuBar.add(menu);
+    
+    JMenu shapeMenu = new JMenu("Shapes");
+    createMenuItem(shapeMenu, "Circle", e -> shapeContainer.setShape(ShapeTypes.CIRCLE));
+    createMenuItem(shapeMenu, "Rectangle", e -> shapeContainer.setShape(ShapeTypes.RECTANGLE));
+    menuBar.add(shapeMenu);
+    
+    JMenu markMenu = new JMenu("Marks");
+    createMenuItem(markMenu, "Fill", e -> shapeContainer.setMarkType(MarkTypes.FILL));
+    createMenuItem(markMenu, "Crosshair", e -> shapeContainer.setMarkType(MarkTypes.CROSSHAIR));
+    menuBar.add(markMenu);
+    
     this.setJMenuBar(menuBar);
     }
   
